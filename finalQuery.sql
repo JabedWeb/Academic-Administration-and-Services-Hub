@@ -30,7 +30,7 @@ WHERE ce.student_id = 213902046 AND ce.term_id = 1;
 
 
 
---Find Class Representatives for Specific Courses in a Term:
+--Find Class Representatives for Specific Courses in a Term: 
 SELECT cr.student_id, s.first_name, s.last_name, s.phone, c.course_name, t.term_name 
 FROM ClassRepresentatives cr 
 JOIN Students s ON cr.student_id = s.student_id 
