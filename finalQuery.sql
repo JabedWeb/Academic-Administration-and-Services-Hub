@@ -180,10 +180,6 @@ GROUP BY d.department_name;
 
 --Administrative Removal of a Student:
 DELETE FROM Students WHERE student_id = 213902047;
-
-
-
-
  -- research project query
 
 SELECT 
