@@ -20,7 +20,7 @@ DELIMITER ;
 
 insert into Payments (student_id, amount, payment_date, payment_type, payment_method, status)
 values
-(213902046, 300000, curdate(), 'Tuition Fee', 'Bank', 'Completed');
+(213902046, 3000, curdate(), 'Tuition Fee', 'Bank', 'Completed');
 
 
 

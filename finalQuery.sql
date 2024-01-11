@@ -82,66 +82,7 @@ JOIN Departments d ON s.department_id = d.department_id;
 
 ---------------------------------------------
 ---------------------------------------------
-DELIMITER $$
-
-CREATE TRIGGER update_enrollment_grade_point_status
-AFTER INSERT ON marks
-FOR EACH ROW
-BEGIN
-    DECLARE letterGrade CHAR(2);
-    DECLARE GPA DECIMAL(3,2); 
-	DECLARE Course_Status VARCHAR(20);
-    SET Course_Status = 'Completed';
-
-    --  grade and CGPA based on the mark
-    IF NEW.mark >= 80  AND NEW.mark <=100 THEN
-        SET letterGrade = 'A+';
-        SET GPA = 4.00;
-    ELSEIF NEW.mark >= 75 THEN
-        SET letterGrade = 'A';
-        SET GPA = 3.75;
-    ELSEIF NEW.mark >= 70 THEN
-        SET letterGrade = 'A-';
-        SET GPA = 3.50;
-    ELSEIF NEW.mark >= 65 THEN
-        SET letterGrade = 'B+';
-        SET GPA = 3.25;
-    ELSEIF NEW.mark >= 60 THEN
-        SET letterGrade = 'B';
-        SET GPA = 3.00;
-    ELSEIF NEW.mark >= 55 THEN
-        SET letterGrade = 'B-';
-        SET GPA = 2.75;
-    ELSEIF NEW.mark >= 50 THEN
-        SET letterGrade = 'C+';
-        SET GPA = 2.50;
-    ELSEIF NEW.mark >= 45 THEN
-        SET letterGrade = 'C';
-        SET GPA = 2.25;
-    ELSEIF NEW.mark >= 40 THEN
-        SET letterGrade = 'D';
-        SET GPA = 2.00;
-    ELSE
-		SET Course_Status = 'Incompleted';
-        SET letterGrade = 'F';
-        SET GPA = 0.00;
-    END IF;
-
-    -- Update the enrollment table grade, status and grade_point of this subject
-    UPDATE courseenrollment
-    SET status = Course_Status,
-        grade = letterGrade, 
-        grade_point = GPA
-    WHERE student_id = NEW.student_id AND course_id = NEW.course_id;
-    
-END$$
-
-DELIMITER ;
-
--- Insert mark for a student
-INSERT INTO marks (student_id, course_id, mark) 
-VALUES (213902046, 3, 80.00);
-
+ -- Trigger based
 
 -- Calculate Total Credit completed for a Specific Student
 SELECT 
@@ -158,39 +99,6 @@ GROUP BY
   S.student_id, S.first_name, S.last_name;
 
 
-
-
-
-DELIMITER $$
-CREATE TRIGGER after_payment_insert
-AFTER INSERT ON Payments
-FOR EACH ROW
-BEGIN
-    -- check exists, then update payable_amount value
-    IF EXISTS (SELECT 1 FROM AmountToPay WHERE student_id = NEW.student_id) THEN
-        UPDATE AmountToPay
-        SET payable_ammount = payable_ammount - NEW.amount
-        WHERE student_id = NEW.student_id;
-    ELSE
-        -- if doesn't exits then assume initial amount to pay 550000
-        INSERT INTO AmountToPay (student_id, payable_ammount)
-        VALUES (NEW.student_id, 550000 - NEW.amount);
-    END IF;
-END$$
-DELIMITER ;
-
-
-insert into Payments (student_id, amount, payment_date, payment_type, payment_method, status)
-values
-(213902046, 300000, curdate(), 'Tuition Fee', 'Bank', 'Completed');
-
--- Insert data into Payments
-INSERT INTO Payments (student_id, amount, payment_date, payment_type, payment_method, status) VALUES
-(213902045, 15000.00, curdate(), 'Tuition Fee', 'Online', 'Completed'),
-(213902046, 12000.00, curdate(), 'Tuition Fee', 'Bank Transfer', 'Completed'),
-(213902047, 13000.00, curdate(), 'Tuition Fee', 'Cash', 'Completed'),
-(213902048, 14000.00, curdate(), 'Tuition Fee', 'Online', 'Completed'),
-(213902049, 11000.00, curdate(), 'Tuition Fee', 'Bank Transfer', 'Completed');
 
 
 -- Check Financials - Payments and Due Amount:
@@ -225,9 +133,7 @@ WHERE
     a.attendance_status = 'Absent'
     AND a.term_id = 1
 GROUP BY 
-    a.student_id, 
-    s.first_name, 
-    s.last_name
+    a.student_id
 HAVING 
     COUNT(*) > 3;
 
@@ -276,12 +182,7 @@ GROUP BY d.department_name;
 DELETE FROM Students WHERE student_id = 213902047;
 
 
-INSERT INTO ResearchProjects (project_name, lead_faculty_id, budget, start_date, end_date) VALUES
-('Artificial Intelligence in Healthcare', 5000, 2000000.00, '2022-01-01', '2023-01-01'),
-('Renewable Energy Systems', 5001, 1500000.00, '2022-02-01', '2023-02-01'),
-('Consumer Behavior Analysis', 5002, 1000000.00, '2022-03-01', '2023-03-01'),
-('Modern English Literature', 5003, 800000.00, '2022-04-01', '2023-04-01'),
-('Constitutional Law and Society', 5004, 1200000.00, '2022-05-01', '2023-05-01');
+
 
  -- research project query
 

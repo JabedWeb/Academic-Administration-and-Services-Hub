@@ -473,3 +473,19 @@ INSERT INTO TransportationSchedule (transport_id, location_id, departure_time) V
 (3, 3, '09:00:00'),
 (4, 4, '10:00:00'),
 (5, 1, '08:00:00');
+
+
+INSERT INTO ResearchProjects (project_name, lead_faculty_id, budget, start_date, end_date) VALUES
+('Artificial Intelligence in Healthcare', 5000, 2000000.00, '2022-01-01', '2023-01-01'),
+('Renewable Energy Systems', 5001, 1500000.00, '2022-02-01', '2023-02-01'),
+('Consumer Behavior Analysis', 5002, 1000000.00, '2022-03-01', '2023-03-01'),
+('Modern English Literature', 5003, 800000.00, '2022-04-01', '2023-04-01'),
+('Constitutional Law and Society', 5004, 1200000.00, '2022-05-01', '2023-05-01');
+
+
+INSERT INTO Payments (student_id, amount, payment_date, payment_type, payment_method, status) VALUES
+(213902045, 15000.00, curdate(), 'Tuition Fee', 'Online', 'Completed'),
+(213902046, 12000.00, curdate(), 'Tuition Fee', 'Bank Transfer', 'Completed'),
+(213902047, 13000.00, curdate(), 'Tuition Fee', 'Cash', 'Completed'),
+(213902048, 14000.00, curdate(), 'Tuition Fee', 'Online', 'Completed'),
+(213902049, 11000.00, curdate(), 'Tuition Fee', 'Bank Transfer', 'Completed');
